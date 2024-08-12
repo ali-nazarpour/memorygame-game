@@ -1,54 +1,16 @@
-import "./style.css";
-
 const cardArray = [
-  {
-    name: "cat",
-    img: "/cat.webp",
-  },
-  {
-    name: "dog",
-    img: "/dog.webp",
-  },
-  {
-    name: "horse",
-    img: "/horse.webp",
-  },
-  {
-    name: "cow",
-    img: "/cow.webp",
-  },
-  {
-    name: "chicken",
-    img: "/chicken.webp",
-  },
-  {
-    name: "pig",
-    img: "/pig.webp",
-  },
-  {
-    name: "cat",
-    img: "/cat.webp",
-  },
-  {
-    name: "dog",
-    img: "/dog.webp",
-  },
-  {
-    name: "horse",
-    img: "/horse.webp",
-  },
-  {
-    name: "cow",
-    img: "/cow.webp",
-  },
-  {
-    name: "chicken",
-    img: "/chicken.webp",
-  },
-  {
-    name: "pig",
-    img: "/pig.webp",
-  },
+  { name: "cat", img: "/cat.webp" },
+  { name: "dog", img: "/dog.webp" },
+  { name: "horse", img: "/horse.webp" },
+  { name: "cow", img: "/cow.webp" },
+  { name: "chicken", img: "/chicken.webp" },
+  { name: "pig", img: "/pig.webp" },
+  { name: "cat", img: "/cat.webp" },
+  { name: "dog", img: "/dog.webp" },
+  { name: "horse", img: "/horse.webp" },
+  { name: "cow", img: "/cow.webp" },
+  { name: "chicken", img: "/chicken.webp" },
+  { name: "pig", img: "/pig.webp" },
 ];
 
 cardArray.sort(() => 0.5 - Math.random());
@@ -61,39 +23,39 @@ let cardsWon = [];
 
 // Create the game board
 function createBoard() {
-  for (let i = 0; i < cardArray.length; i++) {
-    const card = document.createElement("div");
-    card.classList.add("card");
+  cardArray.forEach((card, index) => {
+    const cardElement = document.createElement("div");
+    cardElement.classList.add("card");
 
     const cardFront = document.createElement("img");
     cardFront.src = "/front.webp";
     cardFront.classList.add("front");
 
     const cardBack = document.createElement("img");
-    cardBack.src = cardArray[i].img;
+    cardBack.src = card.img;
     cardBack.classList.add("back");
 
-    card.dataset.id = i;
-    card.addEventListener("click", flipCard);
+    cardElement.dataset.id = index;
+    cardElement.addEventListener("click", flipCard);
 
-    card.appendChild(cardFront);
-    card.appendChild(cardBack);
-    grid.appendChild(card);
-  }
+    cardElement.appendChild(cardFront);
+    cardElement.appendChild(cardBack);
+    grid.appendChild(cardElement);
+  });
 }
 
 // Flip the card
 function flipCard() {
   const cardId = this.dataset.id;
 
-  if (cardsChosenId.length === 2) return;
+  if (cardsChosenId.length === 2 || this.classList.contains("flip")) return;
 
   this.classList.add("flip");
   cardsChosen.push(cardArray[cardId].name);
   cardsChosenId.push(cardId);
 
   if (cardsChosen.length === 2) {
-    setTimeout(checkForMatch, 500);
+    setTimeout(checkForMatch, 800);
   }
 }
 
@@ -101,11 +63,12 @@ function flipCard() {
 function checkForMatch() {
   const cards = document.querySelectorAll(".card");
   const [optionOneId, optionTwoId] = cardsChosenId;
+
   if (optionOneId === optionTwoId) {
     cards[optionOneId].classList.remove("flip");
   } else if (cardsChosen[0] === cardsChosen[1]) {
-    cards[optionOneId].removeEventListener("click", flipCard);
-    cards[optionTwoId].removeEventListener("click", flipCard);
+    cards[optionOneId].classList.add("match");
+    cards[optionTwoId].classList.add("match");
     cardsWon.push(cardsChosen);
   } else {
     cards[optionOneId].classList.remove("flip");
@@ -117,7 +80,7 @@ function checkForMatch() {
   resultDisplay.textContent = cardsWon.length;
 
   if (cardsWon.length === cardArray.length / 2) {
-    setTimeout(showWinMessage, 500);
+    setTimeout(showWinMessage, 800);
   }
 }
 
